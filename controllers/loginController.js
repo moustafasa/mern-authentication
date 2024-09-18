@@ -1,4 +1,5 @@
-const { data: users, setUsers } = require("../models/users");
+// const { data: users, setUsers } = require("../models/Users");
+const User = require("../models/Users");
 const jwt = require("jsonwebtoken");
 
 async function loginController(req, res) {
@@ -7,7 +8,7 @@ async function loginController(req, res) {
   if (!username || !password) {
     return res.status(400).send("please write username and password");
   }
-  const foundUser = users.find((user) => user.username === username);
+  const foundUser = await User.findOne({ username }).exec();
   if (!foundUser) {
     return res.status(401).send("user isn't found");
   }
@@ -32,8 +33,9 @@ async function loginController(req, res) {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000,
     });
-    const otherUsers = users.filter((user) => user.username !== username);
-    setUsers([...otherUsers, { ...foundUser, refreshToken }]);
+
+    foundUser.refreshToken = refreshToken;
+    await foundUser.save();
 
     return res.status(200).json({ accessToken });
   }

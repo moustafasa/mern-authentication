@@ -9,9 +9,12 @@ const verifyToken = require("./middlewares/verifyToken");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
+const dbConnect = require("./config/dbConnect");
 const path = require("path");
 const server = express();
 const PORT = process.env.PORT;
+
+dbConnect();
 
 server.use(express.json());
 server.use(cookieParser());

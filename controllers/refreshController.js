@@ -1,12 +1,13 @@
-const { data: users, setUsers } = require("../models/users");
+// const { data: users, setUsers } = require("../models/Users");
+const Users = require("../models/Users");
 const jwt = require("jsonwebtoken");
 
-const refreshController = (req, res) => {
+const refreshController = async (req, res) => {
   const cookie = req.cookies;
   if (!cookie?.refreshToken) return res.sendStatus(401);
-  const foundUser = users.find(
-    (user) => user.refreshToken === cookie.refreshToken
-  );
+  const foundUser = await Users.findOne({
+    refreshToken: cookie.refreshToken,
+  }).exec();
   if (!foundUser) return res.sendStatus(403);
   jwt.verify(
     cookie.refreshToken,

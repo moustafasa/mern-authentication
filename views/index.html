@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <button>login</button>
+    <button>logout</button>
+    <script>
+      const loginButton = document.querySelector("button:first-child");
+      const logoutButton = document.querySelector("button:last-of-type");
+      loginButton.addEventListener("click", login);
+      logoutButton.addEventListener("click", logout);
+      async function login() {
+        const res = await fetch("http://localhost:3002/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: "moustafa", password: "123456" }),
+        });
+        const data = await res.json();
+      }
+      async function logout() {
+        const res = await fetch("http://localhost:3002/logout");
+        console.log(res);
+      }
+    </script>
+  </body>
+</html>
